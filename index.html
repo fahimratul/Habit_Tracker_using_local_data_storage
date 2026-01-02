@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/616/616422.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Habit Tracker</h1>
+        <div class="date-display" id="dateDisplay"></div>
+        <div style="text-align: center; margin-bottom: 15px;">
+            <button onclick="showBackupsection()" class="btn btn-info" id="BackupButton"> Backup</button>
+            <button onclick="AddHabit()" class="btn btn-primary" id="AddHabitBtn">Add Habit</button>
+            <button onclick="ShowDetails()" class="btn btn-success" id="ShowDetailsBtn"> Show Details</button>
+        </div>
+        <div class="backup-section"  id="backupSection" style="display: none;">
+            <h3>
+                <span>💾 Data Backup & Security</span>
+            </h3>
+            <div class="backup-buttons">
+                <button class="btn btn-success" onclick="exportData()">📥 Export Backup</button>
+                <button class="btn btn-warning" onclick="document.getElementById('importFile').click()">📤 Import Backup</button>
+                <button class="btn btn-info" onclick="autoBackup()">🔄 Auto Backup Now</button>
+            </div>
+            <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+            <div class="last-backup" id="lastBackup">Last auto-backup: Never</div>
+            <div class="storage-info">
+                • Data saved: <span id="storageSize">0 KB</span> • 
+                <span id="habitCount">0</span> habits tracked
+            </div>
+        </div>
+
+        <div class="add-habit-section" id="addHabitSection" style="display: none;">
+            <input type="text" id="habitInput" placeholder="Enter a new habit (e.g., Exercise, Read, Meditate)">
+            <button class="btn btn-primary" onclick="addHabit()">Add Habit</button>
+        </div>
+
+        <div class="legend" id="legendSection" style="display: none;">
+            <div class="legend-item">
+                <div class="legend-box completed">✓</div>
+                <span>Completed</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box not-completed">✗</div>
+                <span>Not Completed</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box not-set">—</div>
+                <span>Not Set (Today/Future)</span>
+            </div>
+            <div class="legend-item">
+                <span style="font-size: 1.5em;">🔒</span>
+                <span>Locked (Past dates - auto-marked as ✗ if not completed)</span>
+            </div>
+            <h3>Before Clearing Your Browsers History or Data Please Backup Your Data. After that you can again import your data safely.</h3>
+        </div>
+        <div id="notificationStatus"></div>
+        <div id="persistentStorageStatus"></div>
+
+        <div class="controls">
+            <div class="week-navigation">
+                <button class="nav-btn" onclick="previousWeek()">
+                    <span>←</span> Previous Week
+                </button>
+                <div class="week-info">
+                    <div class="week-label" id="weekLabel">This Week</div>
+                    <div class="week-range" id="weekRange">Dec 23 - Dec 29</div>
+                </div>
+                <button class="nav-btn" onclick="nextWeek()">
+                    Next Week <span>→</span>
+                </button>
+            </div>
+            <button class="today-btn" onclick="goToCurrentWeek()">
+                📅 Today
+            </button>
+        </div>
+
+        <div class="habit-grid-container">
+            <table class="habit-grid" id="habitGrid">
+                <thead id="gridHeader"></thead>
+                <tbody id="gridBody"></tbody>
+            </table>
+        </div>
+
+        <div class="chart-section">
+            <h2> Daily Score Progress</h2>
+            <div class="chart-container">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
