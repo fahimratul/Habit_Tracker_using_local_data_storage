@@ -10,8 +10,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎯 Habit Tracker</h1>
-        <div class="date-display" id="dateDisplay"></div>
+        <h1>Habit Tracker</h1>
+        <div class="top-bar">
+            <div class="date-display" id="dateDisplay"></div>
+            <div class="theme-toggle" aria-live="polite">
+                <label class="switch" aria-label="Toggle dark mode">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-text" id="themeLabel">Light Mode</span>
+            </div>
+        </div>
         <div style="text-align: center; margin-bottom: 15px;">
             <button onclick="showBackupsection()" class="btn btn-info" id="BackupButton"> Backup</button>
             <button onclick="AddHabit()" class="btn btn-primary" id="AddHabitBtn">Add Habit</button>
@@ -94,6 +103,15 @@
             </div>
         </div>
     </div>
+    <footer>
+        <div class="footer-content">
+            <span>© 2026 Habit Tracker. All rights reserved.</span>
+            <span> | </span>
+            <a href="https://github.com/fahimratul" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <span> | </span>
+            <span>Developed by Fahim Ratul</span>
+        </div>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

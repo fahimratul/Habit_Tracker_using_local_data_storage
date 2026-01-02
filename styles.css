@@ -10,6 +10,74 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     padding: 20px;
+    color: #1f2937;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.toggle-text {
+    min-width: 80px;
+    text-align: right;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d1d5db;
+    transition: 0.3s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked + .slider {
+    background-color: #10b981;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(22px);
 }
 
 .container {
@@ -432,6 +500,133 @@ input[type="file"] {
     display: none;
 }
 
+/* Dark mode overrides */
+body.dark-mode {
+    background: linear-gradient(135deg, #04143a 0%, #390733 100%);
+    color: #e5e7eb;
+}
+
+.dark-mode .container {
+    background: #010d26;
+    box-shadow: 40px 0px 80px 0px rgba(11, 99, 112, 0.6) , -40px 0px 80px 0px rgba(172, 17, 214, 0.6), 0 -20px 80px rgba(0, 0, 0, 0.7);
+    animation: glowingshadow 10s infinite;
+}
+@keyframes glowingshadow {
+    0%, 100% {
+        box-shadow: 40px 0px 80px 0px rgba(11, 99, 112, 0.6) , -40px 0px 80px 0px rgba(172, 17, 214, 0.6), 0 -20px 80px rgba(0, 0, 0, 0.7);
+    }
+    50% {
+        box-shadow: -40px 0px 100px 10px rgba(11, 99, 112, 0.8) , 40px 0px 100px 10px rgba(172, 17, 214, 0.8), 0 20px 100px rgba(0, 0, 0, 0.9);
+    }
+    
+}
+
+.dark-mode h1 {
+    color: #93c5fd;
+}
+
+.dark-mode .date-display,
+.dark-mode .toggle-text {
+    color: #d1d5db;
+}
+
+.dark-mode .controls,
+.dark-mode .legend,
+.dark-mode .chart-section,
+.dark-mode .add-habit-section,
+.dark-mode .backup-section {
+    background: #111827;
+    border-color: #1f2937;
+}
+
+.dark-mode .add-habit-section input {
+    background: #0b1220;
+    color: #e5e7eb;
+    border-color: #1f2937;
+}
+
+.dark-mode .week-label,
+.dark-mode .week-range,
+.dark-mode .storage-info,
+.dark-mode .habit-grid td:first-child {
+    color: #d1d5db;
+}
+
+.dark-mode .storage-info {
+    background: #0f172a;
+    border-color: #1d4ed8;
+}
+
+.dark-mode .habit-grid-container {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .habit-grid {
+    background: #0b1220;
+    color: #e5e7eb;
+}
+
+.dark-mode .habit-grid th {
+    background: #111827;
+}
+
+.dark-mode .habit-grid th.today-column {
+    background: #166534;
+    box-shadow: 0 0 10px rgba(22, 101, 52, 0.5);
+}
+
+.dark-mode .habit-grid td.today-column {
+    background: #0f172a;
+}
+
+.dark-mode .habit-grid td {
+    border: 1px solid #1f2937;
+}
+
+.dark-mode .habit-grid td:first-child {
+    background: #0f172a;
+}
+
+.dark-mode .habit-cell.not-set {
+    background: #374151;
+    color: #9ca3af;
+}
+
+.dark-mode .habit-cell.locked {
+    box-shadow: none;
+}
+
+.dark-mode .score-row,
+.dark-mode .score-row td {
+    background: #0f172a !important;
+    color: #93c5fd;
+}
+
+.dark-mode .chart-section h2 {
+    color: #93c5fd;
+}
+
+.dark-mode .legend-box.not-set {
+    background: #374151;
+}
+
+.dark-mode .switch input:checked + .slider {
+    background-color: #22d3ee;
+}
+
+.dark-mode .slider {
+    background-color: #334155;
+}
+.dark-mode .nav-btn {
+    border-color: #93c5fd;
+    color: #93c5fd;
+    background: #0b1220;
+}
+.dark-mode .nav-btn:hover {
+    background: #93c5fd;
+    color: #0b1220;
+    box-shadow: 0 5px 15px rgba(147, 197, 253, 0.3);
+}
 @media (max-width: 768px) {
     .container {
         padding: 15px;

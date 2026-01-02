@@ -2,6 +2,45 @@ let habits = [];
 let chart = null;
 let db = null;
 let currentWeekOffset = 0; // 0 = this week, -1 = last week, 1 = next week
+const THEME_STORAGE_KEY = 'habitTheme';
+
+function applyTheme(theme) {
+    const body = document.body;
+    const toggle = document.getElementById('themeToggle');
+    const label = document.getElementById('themeLabel');
+    const isDark = theme === 'dark';
+
+    body.classList.toggle('dark-mode', isDark);
+
+    if (toggle) {
+        toggle.checked = isDark;
+    }
+    if (label) {
+        label.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+    }
+
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+
+    if (chart) {
+        const dates = getWeekDates(currentWeekOffset);
+        updateChart(dates);
+    }
+}
+
+function initTheme() {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const themeToUse = savedTheme || (prefersDark ? 'dark' : 'light');
+
+    applyTheme(themeToUse);
+
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) {
+        toggle.addEventListener('change', (event) => {
+            applyTheme(event.target.checked ? 'dark' : 'light');
+        });
+    }
+}
 
 function ShowDetails() {
     const section = document.getElementById('legendSection');
@@ -246,6 +285,7 @@ function showNotification(message) {
 async function init() {
     await initDB();
     await loadHabits();
+    initTheme();
     displayDate();
     await updateDisplay();
     scheduleAutoBackup();
@@ -609,6 +649,12 @@ function updateChart(dates) {
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     });
 
+    const isDark = document.body.classList.contains('dark-mode');
+    const lineColor = isDark ? 'rgb(96, 165, 250)' : 'rgb(102, 126, 234)';
+    const fillColor = isDark ? 'rgba(96, 165, 250, 0.2)' : 'rgba(102, 126, 234, 0.2)';
+    const tickColor = isDark ? '#e5e7eb' : '#1f2937';
+    const gridColor = isDark ? '#1f2937' : '#e5e7eb';
+
     if (chart) {
         chart.destroy();
     }
@@ -620,14 +666,14 @@ function updateChart(dates) {
             datasets: [{
                 label: 'Daily Completion Score (%)',
                 data: scores,
-                backgroundColor: 'rgba(102, 126, 234, 0.2)',
-                borderColor: 'rgb(102, 126, 234)',
+                backgroundColor: fillColor,
+                borderColor: lineColor,
                 borderWidth: 3,
                 fill: true,
                 tension: 0.4,
                 pointRadius: 5,
                 pointHoverRadius: 7,
-                pointBackgroundColor: 'rgb(102, 126, 234)',
+                pointBackgroundColor: lineColor,
                 pointBorderColor: '#fff',
                 pointBorderWidth: 2
             }]
@@ -639,6 +685,9 @@ function updateChart(dates) {
                 legend: {
                     display: true,
                     position: 'top',
+                    labels: {
+                        color: tickColor
+                    }
                 },
                 tooltip: {
                     callbacks: {
@@ -652,20 +701,32 @@ function updateChart(dates) {
                 y: {
                     beginAtZero: true,
                     max: 100,
+                    grid: {
+                        color: gridColor
+                    },
                     ticks: {
+                        color: tickColor,
                         callback: function(value) {
                             return value + '%';
                         }
                     },
                     title: {
                         display: true,
-                        text: 'Completion Score (%)'
+                        text: 'Completion Score (%)',
+                        color: tickColor
                     }
                 },
                 x: {
+                    grid: {
+                        color: gridColor
+                    },
                     title: {
                         display: true,
-                        text: 'Date'
+                        text: 'Date',
+                        color: tickColor
+                    },
+                    ticks: {
+                        color: tickColor
                     }
                 }
             }
