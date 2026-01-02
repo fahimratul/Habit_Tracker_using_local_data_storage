@@ -28,29 +28,13 @@ A modern, feature-rich web-based habit tracking application that helps you build
 - A modern web browser (Chrome, Firefox, Safari, Edge)
 - No server or installation required!
 
-### Installation
+### Visit the link 
+```
+Website
 
-1. **Clone or Download** the repository:
-   ```bash
-   git clone https://github.com/yourusername/Habit_Tracker_using_local_data_storage.git
-   ```
+https://habitstracker.pages.dev/
 
-2. **Open the application**:
-   - Simply open `index.html` in your web browser
-   - Or use a local server for development:
-     ```bash
-     # Using Python 3
-     python -m http.server 8000
-     
-     # Using Node.js http-server
-     npx http-server
-     ```
-
-3. **Start tracking**:
-   - Click "Add Habit" to create your first habit
-   - Mark habits as complete each day
-   - Navigate between weeks to view your progress
-
+```
 ## 📖 Usage Guide
 
 ### Adding a Habit
@@ -215,6 +199,6 @@ For questions, suggestions, or feedback, please open an issue on GitHub.
 
 ---
 
-**Made with ❤️ for building better habits**
+**Made with ❤️ for building better habits by Fahim Ratul**
 
 *Remember: Consistency is key! Track your habits daily and watch yourself grow.* 🌱
