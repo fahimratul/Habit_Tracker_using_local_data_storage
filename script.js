@@ -703,16 +703,39 @@ document.head.appendChild(style);
 async function requestPersistentStoragePermission() {
     const statusDiv = document.getElementById('persistentStorageStatus');
     
-    // Check if browser supports persistent storage
-    if (navigator.storage && navigator.storage.persist) {
-        try {
+    try {
+        // Check if browser supports persistent storage API
+        if (navigator.storage && navigator.storage.persist) {
             const alreadyRequested = localStorage.getItem('persistentStorageRequested');
             
+            // Only ask once unless user denies
             if (!alreadyRequested) {
                 const isPersistent = await navigator.storage.persist();
-                localStorage.setItem('persistentStorageRequested', 'true');
                 
                 if (isPersistent) {
+                    statusDiv.innerHTML = `
+                        <div class="notification-enabled">
+                            ✅ Site will stay active in the background when you close the browser
+                        </div>
+                    `;
+                    localStorage.setItem('persistentStorageRequested', 'true');
+                    localStorage.setItem('persistentStorageGranted', 'true');
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="notification-disabled">
+                            🔄 Background activity needs permission
+                            <br>
+                            <button class="btn btn-primary" style="margin-top: 10px;" onclick="requestPersistentStoragePermissionManual()">
+                                Allow Background Activity
+                            </button>
+                        </div>
+                    `;
+                    localStorage.setItem('persistentStorageRequested', 'true');
+                }
+            } else {
+                // Check if it was previously granted
+                const wasGranted = localStorage.getItem('persistentStorageGranted');
+                if (wasGranted === 'true') {
                     statusDiv.innerHTML = `
                         <div class="notification-enabled">
                             ✅ Site will stay active in the background when you close the browser
@@ -721,53 +744,26 @@ async function requestPersistentStoragePermission() {
                 } else {
                     statusDiv.innerHTML = `
                         <div class="notification-disabled">
-                            🔄 Requesting background activity permission...
-                            <br>
-                            <button class="btn btn-primary" style="margin-top: 10px;" onclick="requestPersistentStoragePermissionManual()">
-                                Allow Background Activity
-                            </button>
-                        </div>
-                    `;
-                }
-            } else {
-                // Check current persistent storage status
-                const isPersistent = await navigator.storage.persist();
-                if (isPersistent) {
-                    statusDiv.innerHTML = `
-                        <div class="notification-enabled">
-                            ✅ Site will stay active in the background when you close the browser
+                            ⚠️ Background activity permission denied. Please enable in browser settings.
                         </div>
                     `;
                 }
             }
-        } catch (error) {
-            console.error('Error requesting persistent storage:', error);
+        } else {
+            // Browser doesn't support persistent storage
+            statusDiv.innerHTML = `
+                <div class="notification-disabled">
+                    ℹ️ Your browser may not support background activity requests
+                </div>
+            `;
         }
-    } else if (navigator.permissions && navigator.permissions.query) {
-        // Fallback for browsers supporting permissions API
-        try {
-            const permission = await navigator.permissions.query({ name: 'storage-access' });
-            
-            if (permission.state === 'granted') {
-                statusDiv.innerHTML = `
-                    <div class="notification-enabled">
-                        ✅ Site will stay active in the background when you close the browser
-                    </div>
-                `;
-            } else {
-                statusDiv.innerHTML = `
-                    <div class="notification-disabled">
-                        🔄 This site needs permission to stay active in the background
-                        <br>
-                        <button class="btn btn-primary" style="margin-top: 10px;" onclick="requestPersistentStoragePermissionManual()">
-                            Allow Background Activity
-                        </button>
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error('Error with permissions API:', error);
-        }
+    } catch (error) {
+        console.error('Error requesting persistent storage:', error);
+        statusDiv.innerHTML = `
+            <div class="notification-disabled">
+                ⚠️ Unable to request background activity permission
+            </div>
+        `;
     }
 }
 
@@ -775,8 +771,8 @@ async function requestPersistentStoragePermission() {
 async function requestPersistentStoragePermissionManual() {
     const statusDiv = document.getElementById('persistentStorageStatus');
     
-    if (navigator.storage && navigator.storage.persist) {
-        try {
+    try {
+        if (navigator.storage && navigator.storage.persist) {
             const isPersistent = await navigator.storage.persist();
             
             if (isPersistent) {
@@ -785,6 +781,7 @@ async function requestPersistentStoragePermissionManual() {
                         ✅ Site will stay active in the background when you close the browser
                     </div>
                 `;
+                localStorage.setItem('persistentStorageGranted', 'true');
                 showNotification('✅ Background activity enabled!');
             } else {
                 statusDiv.innerHTML = `
@@ -794,14 +791,14 @@ async function requestPersistentStoragePermissionManual() {
                 `;
                 showNotification('⚠️ Please enable in browser settings');
             }
-        } catch (error) {
-            console.error('Error requesting persistent storage:', error);
-            statusDiv.innerHTML = `
-                <div class="notification-disabled">
-                    ⚠️ Unable to request background activity permission
-                </div>
-            `;
         }
+    } catch (error) {
+        console.error('Error requesting persistent storage:', error);
+        statusDiv.innerHTML = `
+            <div class="notification-disabled">
+                ⚠️ Unable to request background activity permission
+            </div>
+        `;
     }
 }
 
